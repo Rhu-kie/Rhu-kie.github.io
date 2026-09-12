@@ -1,0 +1,91 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PhaseList from "../../components/PhaseList.astro";
+import StatRow from "../../components/StatRow.astro";
+import ArrowIcon from "../../components/ArrowIcon.astro";
+import { site } from "../../site.config";
+
+export async function getStaticPaths() {
+  const work = await getCollection("work");
+  return work.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { eyebrow, title, meta, phases, outcomes, externalUrl } = entry.data;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={entry.data.blurb}>
+  <main class="container page">
+    <a href="/#work" class="back-link">&larr; Selected work</a>
+
+    <p class="label">{eyebrow}</p>
+    <h1 class="work-h1">{title}</h1>
+
+    <div class="grid-editorial work-grid">
+      <div class="meta-stack">
+        {
+          meta.map((m) => (
+            <div class="meta-row rule-top">
+              <p class="label">{m.k}</p>
+              <p class="meta-v">{m.v}</p>
+            </div>
+          ))
+        }
+      </div>
+      <div>
+        <div class="prose">
+          <Content />
+        </div>
+
+        <h2>Approach</h2>
+        <PhaseList phases={phases} />
+
+        <StatRow stats={outcomes} />
+
+        <p class="repo-link">
+          <a href={externalUrl} class="btn btn-primary" target="_blank" rel="noopener noreferrer">
+            View on GitHub <ArrowIcon />
+          </a>
+        </p>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem);
+  }
+  .work-h1 {
+    font-style: italic;
+    margin-top: 2rem;
+    max-width: 20ch;
+  }
+  .work-grid {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .meta-row {
+    padding: 1rem 0 1.25rem;
+  }
+  .meta-v {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--ink);
+    margin-top: 0.5rem;
+    max-width: none;
+  }
+  .prose :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  h2 {
+    margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
+  }
+  .repo-link {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+import { site } from "../site.config";
+---
+
+<nav>
+  <a href="/" class="nav-brand">{site.name}</a>
+  <div class="nav-links">
+    <a href="/#work" class="nav-link">Work</a>
+    <a href="/writeups" class="nav-link">Writeups</a>
+    <a href="/#about" class="nav-link">About</a>
+    <a href={`mailto:${site.email}`} class="nav-link">Contact</a>
+  </div>
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.25rem clamp(1.5rem, 5vw, 4rem);
+    border-bottom: 1px solid var(--rule);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(250, 248, 244, 0.92);
+    backdrop-filter: blur(8px);
+  }
+
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .nav-brand:hover {
+    color: var(--ink);
+  }
+
+  .nav-links {
+    display: flex;
+    gap: clamp(1.25rem, 3vw, 2.5rem);
+    align-items: center;
+  }
+
+  .nav-link {
+    position: relative;
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    color: var(--ink-mid);
+    text-decoration: none;
+    padding-bottom: 2px;
+    transition: color var(--t-fast);
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform var(--t-mid);
+  }
+  .nav-link:hover {
+    color: var(--ink);
+  }
+  .nav-link:hover::after {
+    transform: scaleX(1);
+  }
+
+  @media (max-width: 560px) {
+    nav {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .nav-links {
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+  }
+</style>

@@ -1,0 +1,29 @@
+---
+import { site } from "../site.config";
+---
+
+<footer>
+  <div class="container footer-inner">
+    <p class="footer-name">{site.name}</p>
+    <p class="label">{site.footerLine}</p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--rule);
+  }
+  .footer-inner {
+    padding: 2.5rem clamp(1.5rem, 5vw, 4rem);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .footer-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    color: var(--ink-mid);
+  }
+</style>

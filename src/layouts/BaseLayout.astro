@@ -1,0 +1,62 @@
+---
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Cybersecurity portfolio: offense, defense, and forensics." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Inter:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Nav />
+    <slot />
+    <Footer />
+    <script>
+      function setupReveal() {
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        if (typeof IntersectionObserver === "undefined") return;
+
+        const els = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.remove("reveal-pending");
+              entry.target.classList.add("reveal-visible");
+              io.unobserve(entry.target);
+            });
+          },
+          { threshold: 0.06, rootMargin: "0px 0px -40px 0px" }
+        );
+
+        els.forEach((el) => {
+          const rect = el.getBoundingClientRect();
+          if (rect.top < window.innerHeight * 0.9) return;
+          el.classList.add("reveal-pending");
+          io.observe(el);
+        });
+      }
+      setupReveal();
+    </script>
+  </body>
+</html>

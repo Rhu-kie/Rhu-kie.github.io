@@ -1,0 +1,221 @@
+---
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WorkCard from "../components/WorkCard.astro";
+import WriteupRow from "../components/WriteupRow.astro";
+import ArrowIcon from "../components/ArrowIcon.astro";
+import portrait from "../assets/portrait.jpg";
+import {
+  site,
+  heroFacts,
+  heroHeadline,
+  heroBody,
+  aboutParagraphs,
+  aboutQuote,
+  contactStatement,
+  certifications,
+} from "../site.config";
+
+const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+const writeups = (await getCollection("writeups")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title={`${site.name} — ${site.roleLabel}`}>
+  <main>
+    <section class="hero container">
+      <p class="label" style="margin-bottom: 2.5rem;">{site.roleLabel}</p>
+      <h1 class="hero-headline">{heroHeadline}</h1>
+      <div class="grid-editorial hero-grid">
+        <div class="rule-top hero-facts">
+          {heroFacts.map((f) => <p>{f}</p>)}
+        </div>
+        <div>
+          <p>{heroBody}</p>
+          <div class="hero-buttons">
+            <a href="#work" class="btn btn-primary">
+              Selected work <ArrowIcon />
+            </a>
+            <a href={`mailto:${site.email}`} class="btn btn-ghost">Get in touch</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="work" class="section container" data-reveal>
+      <div class="section-header">
+        <h2>Selected work</h2>
+        <p class="label">2026</p>
+      </div>
+      <div class="work-grid">
+        {work.map((item) => <WorkCard href={`/work/${item.id}`} kind={item.data.kind} title={item.data.title} blurb={item.data.blurb} stack={item.data.stack} />)}
+      </div>
+    </section>
+
+    <section class="section writeups-band" data-reveal>
+      <div class="container grid-editorial">
+        <h2>Writeups</h2>
+        <div>
+          {writeups.map((post) => (
+            <WriteupRow href={`/writeups/${post.id}`} date={post.data.date} title={post.data.title} blurb={post.data.deck} />
+          ))}
+          <p style="margin-top: 2rem;">
+            <a href="/writeups" class="link-underline">All writeups</a>
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container" data-reveal>
+      <div class="grid-editorial">
+        <h2>Certifications</h2>
+        <div class="certs-grid">
+          {
+            certifications.map((cert) => (
+              <div class="cert rule-top">
+                <p class="label">{cert.year}</p>
+                <p class="cert-name">{cert.name}</p>
+                <p class="cert-body">{cert.body}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section container about-section" data-reveal>
+      <div class="grid-editorial">
+        <div>
+          <h2 style="margin-bottom: 2rem;">About</h2>
+          <div class="portrait-frame">
+            <Image src={portrait} alt="Portrait" width={320} height={400} fit="cover" position="top" />
+          </div>
+        </div>
+        <div>
+          {aboutParagraphs.map((p) => <p>{p}</p>)}
+          <blockquote>{aboutQuote}</blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section class="section container contact-section rule-top" data-reveal>
+      <p class="label" style="margin-bottom: 2rem;">Contact</p>
+      <p class="contact-statement">{contactStatement}</p>
+      <div class="contact-links">
+        <a href={`mailto:${site.email}`} class="link-underline">{site.email}</a>
+        <a href={site.linkedin} class="link-underline" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a href={site.github} class="link-underline" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding: clamp(4rem, 10vw, 9rem) clamp(1.5rem, 5vw, 4rem) clamp(3rem, 6vw, 5rem);
+  }
+  .hero-headline {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(2.5rem, 6.5vw, 6rem);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    max-width: 20ch;
+    text-wrap: balance;
+  }
+  .hero-grid {
+    margin-top: clamp(3rem, 6vw, 5rem);
+  }
+  .hero-facts {
+    padding-top: 1rem;
+  }
+  @media (max-width: 768px) {
+    .hero-facts {
+      order: 2;
+      margin-top: 2rem;
+    }
+  }
+  .hero-facts p {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    max-width: none;
+  }
+  .hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 2.5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 3rem;
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
+    gap: 0 clamp(2rem, 5vw, 4rem);
+  }
+
+  .writeups-band {
+    background: var(--bg-offset);
+  }
+
+  .certs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0 clamp(1.5rem, 4vw, 3rem);
+  }
+  .cert {
+    padding: 1.5rem 0 2rem;
+  }
+  .cert-name {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    color: var(--ink);
+    margin-top: 0.75rem;
+    max-width: none;
+  }
+  .cert-body {
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+    margin-top: 0.5rem;
+    max-width: none;
+  }
+
+  .portrait-frame {
+    border-top: 1px solid var(--rule);
+    max-width: 320px;
+  }
+  .portrait-frame :global(img) {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: saturate(0.3) contrast(0.94) brightness(1.05) sepia(0.08);
+  }
+
+  .contact-statement {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.75rem, 4.5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    max-width: 28ch;
+  }
+  .contact-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: 3rem;
+  }
+</style>

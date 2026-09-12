@@ -1,0 +1,46 @@
+---
+interface Props {
+  href: string;
+  kind: string;
+  title: string;
+  blurb: string;
+  stack: string;
+}
+const { href, kind, title, blurb, stack } = Astro.props;
+---
+
+<a href={href} class="work-card">
+  <p class="label">{kind}</p>
+  <h3>{title}</h3>
+  <p class="blurb">{blurb}</p>
+  <p class="stack label-like">{stack}</p>
+</a>
+
+<style>
+  .work-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    border-top: 1px solid var(--rule);
+    padding: 2rem 0 2.5rem;
+    transition: opacity var(--t-fast);
+  }
+  .work-card:hover {
+    opacity: 0.62;
+  }
+  .work-card h3 {
+    margin-top: 1rem;
+  }
+  .blurb {
+    margin-top: 0.75rem;
+    max-width: 52ch;
+    font-size: 1rem;
+  }
+  .stack.label-like {
+    margin-top: 1.5rem;
+    font-family: var(--font-ui);
+    font-size: 0.8125rem;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+</style>

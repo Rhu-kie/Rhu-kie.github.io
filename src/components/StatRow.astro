@@ -1,0 +1,41 @@
+---
+interface Stat {
+  v: string;
+  k: string;
+}
+interface Props {
+  stats: Stat[];
+}
+const { stats } = Astro.props;
+---
+
+<div class="stat-row rule-top" data-reveal>
+  {
+    stats.map((s) => (
+      <div class="stat">
+        <p class="stat-value">{s.v}</p>
+        <p class="label">{s.k}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .stat-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(2rem, 6vw, 5rem);
+    padding-top: 2rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .stat-value {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-row .label {
+    margin-top: 0.75rem;
+  }
+</style>

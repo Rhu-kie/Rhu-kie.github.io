@@ -1,0 +1,77 @@
+---
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import NumberedChanges from "../../components/NumberedChanges.astro";
+import StatRow from "../../components/StatRow.astro";
+import { site } from "../../site.config";
+
+export async function getStaticPaths() {
+  const writeups = await getCollection("writeups");
+  return writeups.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+const { date, category, minutes, title, deck, changes, stats } = entry.data;
+---
+
+<BaseLayout title={`${title} — ${site.name}`} description={deck}>
+  <main class="container page">
+    <a href="/writeups" class="back-link">&larr; All writeups</a>
+
+    <header class="writeup-header">
+      <p class="label">{date} · {category} · {minutes} min</p>
+      <h1 class="writeup-h1">{title}</h1>
+      <p class="deck">{deck}</p>
+    </header>
+
+    <div class="body rule-top">
+      <Content />
+      <NumberedChanges changes={changes} />
+      <StatRow stats={stats} />
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem);
+  }
+  .writeup-header {
+    max-width: 820px;
+  }
+  .writeup-h1 {
+    margin-top: 2rem;
+  }
+  .deck {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(1.25rem, 2.2vw, 1.75rem);
+    line-height: 1.4;
+    color: var(--ink-mid);
+    margin-top: 2rem;
+    max-width: 34ch;
+  }
+  .body {
+    margin: clamp(3rem, 6vw, 4rem) 0 0;
+    padding-top: clamp(2rem, 4vw, 3rem);
+  }
+  .body :global(p) {
+    margin-bottom: 1.5rem;
+  }
+  .body :global(h2) {
+    margin: clamp(2.5rem, 5vw, 4rem) 0 1.5rem;
+    max-width: var(--col-text);
+  }
+  .body :global(blockquote) {
+    max-width: 24ch;
+  }
+  .body :global(em) {
+    font-style: italic;
+    color: var(--ink);
+  }
+</style>

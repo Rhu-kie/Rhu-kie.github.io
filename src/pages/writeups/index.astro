@@ -1,0 +1,26 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WriteupRow from "../../components/WriteupRow.astro";
+import { site } from "../../site.config";
+
+const writeups = (await getCollection("writeups")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title={`Writeups — ${site.name}`}>
+  <main class="container page">
+    <h1>Writeups</h1>
+    <div class="list">
+      {writeups.map((post) => <WriteupRow href={`/writeups/${post.id}`} date={post.data.date} title={post.data.title} blurb={post.data.deck} />)}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .page {
+    padding: clamp(3rem, 6vw, 5rem) clamp(1.5rem, 5vw, 4rem) clamp(4rem, 8vw, 7rem);
+  }
+  .list {
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+</style>
