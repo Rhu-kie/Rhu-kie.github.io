@@ -21,7 +21,7 @@ const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.
 const writeups = (await getCollection("writeups")).sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title={`${site.name} — ${site.roleLabel}`}>
+<BaseLayout title={`${site.name} · ${site.roleLabel}`}>
   <main>
     <section class="hero container">
       <p class="label" style="margin-bottom: 2.5rem;">{site.roleLabel}</p>

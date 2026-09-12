@@ -18,7 +18,7 @@ const { Content } = await render(entry);
 const { date, category, minutes, title, deck, changes, stats } = entry.data;
 ---
 
-<BaseLayout title={`${title} — ${site.name}`} description={deck}>
+<BaseLayout title={`${title} · ${site.name}`} description={deck}>
   <main class="container page">
     <a href="/writeups" class="back-link">&larr; All writeups</a>
 
