@@ -3,7 +3,7 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://rhu-kie.github.io',
+  site: 'https://rhukie.me',
   markdown: {
     // Design spec calls for no syntax highlighting, ink tints only via our
     // own CSS. Shiki's default theme applies inline styles (dark background,
